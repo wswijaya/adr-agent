@@ -10,41 +10,6 @@ This is an agentic CLI tool that accepts an IT and Software architecture problem
 
 ---
 
-## Project structure
-
-```
-adr-agent/
-├── CLAUDE.md                        ← you are here
-├── src/
-│   ├── agent/
-│   │   ├── orchestrator.py          # Main agentic loop & state machine
-│   │   ├── researcher.py            # Web search + KB retrieval
-│   │   ├── scorer.py                # Rubric-based scoring engine
-│   │   ├── writer.py                # ADR template renderer & file writer
-│   │   └── prompts.py               # All system prompts (primary tuning surface)
-│   ├── kb/
-│   │   ├── loader.py                # KB ingestion & indexing
-│   │   ├── patterns/                # Pre-seeded architecture pattern files (YAML)
-│   │   │   ├── data_platform.yaml
-│   │   │   ├── ai_mlops.yaml
-│   │   │   ├── integration.yaml
-│   │   │   └── governance.yaml
-│   │   └── adr_history/             # Past ADRs for context (drop .md files here)
-│   ├── models/
-│   │   ├── adr.py                   # Pydantic: ADR, Option, Score
-│   │   └── state.py                 # Pydantic: AgentState, ResearchResult
-│   └── cli.py                       # Typer-based CLI entry point
-├── decisions/                       # Generated ADRs land here (git-tracked)
-├── config/
-│   └── rubric.yaml                  # Scoring weights — edit here, not in code
-├── tests/
-│   ├── test_scorer.py
-│   └── fixtures/
-└── requirements.txt
-```
-
----
-
 ## Tech stack
 
 | Layer           | Library / Tool                     | Notes                                             |
@@ -63,25 +28,23 @@ adr-agent/
 ## Agent loop (how the pipeline works)
 
 ```
-INTAKE → RESEARCH → SCORE → CONFIDENCE CHECK → WRITE
-                    ↑________________↓ (retry if confidence low, max 2x)
+INTAKE → CLARIFY → RESEARCH → SCORE → CONFIDENCE CHECK → WRITE
+                               ↑________________↓ (retry if confidence low, max 2x)
 ```
 
 ### Phase details
 
 **INTAKE** — Parse problem statement. Extract: domain, constraints, stakeholders, keywords.
 
-**RESEARCH** — Run parallel sub-tasks:
+**CLARIFY** — Ask 2–4 targeted questions about existing systems and constraints. Skipped when `--no-clarify` is passed or stdin is not a tty. Answers are stored in `IntakeResult.existing_context` and flow into all downstream prompts automatically.
 
-- Web search: 3–5 targeted queries per option candidate (current vendor docs, RFCs, benchmarks)
-- KB lookup: semantic match against `kb/patterns/` and `kb/adr_history/`
-- Synthesise: deduplicate, rank by relevance, generate 3–5 option candidates
+**RESEARCH** — Web search + KB lookup → synthesise 3–5 candidate options. On a retry pass, uses LLM-suggested queries from `state.suggested_queries` instead of generating fresh ones.
 
-**SCORE** — For each option, score all 6 rubric dimensions → generate one-sentence rationale per dimension → compute weighted total.
+**SCORE** — For each option, score all 6 rubric dimensions → one-sentence rationale → compute weighted total. Retries once with a correction prompt on JSON parse failure.
 
-**CONFIDENCE CHECK** — If any option has >2 dimensions flagged "low confidence", trigger re-research. Max 2 retries (configurable in `config/rubric.yaml`).
+**CONFIDENCE CHECK** — If any option has ≥2 dimensions flagged "low confidence", trigger re-research. Strong options are preserved; only weak ones re-enter RESEARCH. Max 2 retries (configurable in `config/rubric.yaml`).
 
-**WRITE** — Render ADR template → write to `/decisions/ADR-NNNN-{slug}.md` → print summary table to terminal via Rich.
+**WRITE** — Render ADR via LLM → atomically write to `/decisions/ADR-NNNN-{slug}.md` (`.tmp` + rename) with file-locked sequence allocation.
 
 ---
 
@@ -112,62 +75,6 @@ The KB covers these domain-to-file mappings:
 | AI/ML & MLOps         | ai_mlops.yaml      | Model registry, feature store, serving     |
 | Integration & API     | integration.yaml   | Protocols, API styles, messaging, eventing |
 | Governance & Security | governance.yaml    | Catalog, lineage, access control, policy   |
-
----
-
-## ADR output format
-
-Every generated file follows this structure:
-
-```markdown
-# ADR-NNNN: {Title}
-
-**Status:** Proposed
-**Date:** YYYY-MM-DD
-**Deciders:** {from input context}
-**Domain:** {Data Platform | AI/ML | Integration | Governance | Solution Arch}
-
-## Context & Problem Statement
-
-## Decision Drivers
-
-## Options Considered
-
-### Option N: {Name}
-
-Scores per dimension + weighted total + rationale + sources
-
-## Decision
-
-## Consequences
-
-## Open Questions
-
-## References
-```
-
-Files are named `ADR-NNNN-{kebab-slug}.md` with auto-incremented sequence numbers.
-
----
-
-## CLI commands
-
-```bash
-# Primary command — run the full agent pipeline
-adr-agent run "<problem statement>"
-
-# With optional context flags
-adr-agent run "<problem statement>" --domain data-platform --stakeholders "Platform team, Governance"
-
-# Dry run — research + score only, no file written
-adr-agent run "<problem statement>" --dry-run
-
-# List recent decisions
-adr-agent list --last 5
-
-# Open an existing ADR for agent-assisted revision
-adr-agent revise decisions/ADR-0003-stream-ingest.md
-```
 
 ---
 
@@ -202,25 +109,3 @@ Output quality is almost entirely determined by `src/agent/prompts.py`. When ite
 - The **research synthesis prompt** must explicitly instruct the model to deduplicate across web and KB results, and to discard options with insufficient evidence rather than hallucinating support.
 - When tuning, use the canonical test case in `tests/fixtures/` — a real decision with a known correct answer — as your ground truth. Do not consider a prompt version stable until it consistently converges on that answer.
 
----
-
-## Environment variables
-
-```bash
-ANTHROPIC_API_KEY=          # Required
-TAVILY_API_KEY=             # Required if using Tavily for web search
-ADR_OUTPUT_DIR=./decisions  # Optional override for output path
-ADR_MAX_RETRIES=2           # Optional override for confidence retry limit
-```
-
----
-
-## Current build phases
-
-| Phase              | Scope                                             | Status         |
-| ------------------ | ------------------------------------------------- | -------------- |
-| 1 — Foundation     | CLI wired, LLM call, raw markdown output          | 🔲 Not started |
-| 2 — Research layer | Web search + KB loader + pattern files seeded     | 🔲 Not started |
-| 3 — Scoring & loop | Rubric engine, confidence check, retry logic      | 🔲 Not started |
-| 4 — Polish         | ADR numbering, `list`, `revise`, stakeholder flag | 🔲 Not started |
-| 5 — Web UI (later) | FastAPI backend + React frontend                  | 🔲 Backlog     |
