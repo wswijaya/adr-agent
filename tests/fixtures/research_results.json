@@ -1,0 +1,28 @@
+[
+  {
+    "option_name": "Apache Kafka on Confluent Cloud",
+    "summary": "Fully managed Apache Kafka service from Confluent. Provides enterprise-grade Kafka with Schema Registry, ksqlDB, and 200+ Kafka Connect connectors. Handles millions of events per second with configurable retention and exactly-once semantics.",
+    "evidence": [
+      "Confluent Cloud supports 99.99% SLA with auto-scaling clusters",
+      "Schema Registry enforces Avro/Protobuf/JSON schema evolution rules",
+      "Kafka Connect ecosystem has 200+ connectors for integration"
+    ],
+    "sources": [
+      "https://docs.confluent.io/cloud/current/overview.html"
+    ],
+    "from_kb": false
+  },
+  {
+    "option_name": "AWS Kinesis Data Streams",
+    "summary": "AWS-native real-time data streaming service tightly integrated with the AWS ecosystem (Lambda, Glue, S3, Redshift). On-demand capacity mode scales automatically. Best suited for AWS-centric architectures with serverless processing.",
+    "evidence": [
+      "Kinesis Data Streams on-demand mode scales automatically without shard management",
+      "Native integration with Lambda for serverless stream processing",
+      "Kinesis Data Firehose delivers to S3/Redshift with built-in transformations"
+    ],
+    "sources": [
+      "https://docs.aws.amazon.com/streams/latest/dev/introduction.html"
+    ],
+    "from_kb": false
+  }
+]

@@ -1,0 +1,47 @@
+{
+  "option_name": "Apache Kafka on Confluent Cloud",
+  "dimension_scores": [
+    {
+      "dimension_id": "fit",
+      "label": "Problem fit",
+      "rationale": "Kafka is purpose-built for high-throughput event streaming and handles 10M+ events/day natively with Schema Registry meeting the evolution constraint.",
+      "score": 5,
+      "confidence": "high"
+    },
+    {
+      "dimension_id": "maturity",
+      "label": "Ecosystem maturity",
+      "rationale": "De-facto industry standard with 10+ years of production use, large community, and enterprise support from Confluent.",
+      "score": 5,
+      "confidence": "high"
+    },
+    {
+      "dimension_id": "cost",
+      "label": "Total cost of ownership",
+      "rationale": "Confluent Cloud at this scale typically runs $1,500-$3,000/month, comfortably within the $5k budget.",
+      "score": 4,
+      "confidence": "medium"
+    },
+    {
+      "dimension_id": "ops",
+      "label": "Operational overhead",
+      "rationale": "Fully managed cluster, Schema Registry, and connectors reduce operational burden significantly.",
+      "score": 4,
+      "confidence": "high"
+    },
+    {
+      "dimension_id": "risk",
+      "label": "Risk and lock-in",
+      "rationale": "Confluent-specific features (ksqlDB, Tiered Storage) create moderate vendor dependency.",
+      "score": 3,
+      "confidence": "high"
+    },
+    {
+      "dimension_id": "skill_match",
+      "label": "Skill match",
+      "rationale": "Kafka expertise is widely available; most platform engineers have prior exposure.",
+      "score": 4,
+      "confidence": "medium"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "problem_statement": "We need to choose a streaming platform capable of handling 10 million events per day for a real-time data pipeline.",
+  "domain": "Data Platform",
+  "constraints": [
+    "Must be cloud-native or cloud-managed",
+    "Budget under $5,000 per month at target scale"
+  ],
+  "stakeholders": [
+    "Platform team",
+    "Data Engineering"
+  ],
+  "keywords": [
+    "streaming",
+    "kafka",
+    "kinesis",
+    "event streaming",
+    "data pipeline",
+    "real-time"
+  ],
+  "decision_drivers": [
+    "Low operational overhead",
+    "High throughput at 10M events/day",
+    "Schema evolution support",
+    "Cost efficiency at scale",
+    "Observability and monitoring"
+  ]
+}

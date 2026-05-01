@@ -1,0 +1,25 @@
+dimensions:
+  - id: fit
+    label: Problem fit
+    weight: 0.25
+  - id: maturity
+    label: Ecosystem maturity
+    weight: 0.20
+  - id: cost
+    label: Total cost of ownership
+    weight: 0.15
+  - id: ops
+    label: Operational overhead
+    weight: 0.15
+  - id: risk
+    label: Risk and lock-in
+    weight: 0.15
+  - id: skill_match
+    label: Skill match
+    weight: 0.10
+
+confidence:
+  low_threshold: 2
+
+retry:
+  max_retries: 2

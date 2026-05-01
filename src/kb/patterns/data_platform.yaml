@@ -1,0 +1,149 @@
+# data_platform.yaml
+# Internal knowledge base — Data Platform architecture patterns
+# Used by the ADR Agent KB lookup phase.
+#
+# Adding a new option:
+#   - tags must match keywords the intake phase would extract
+#   - keep strengths/trade_offs to 2-3 points each
+#   - update last_reviewed when you revise an entry
+
+domain: Data Platform
+
+options:
+
+  - name: Databricks Lakehouse (Delta Lake)
+    summary: >
+      A unified analytics platform built on Apache Spark and Delta Lake, combining
+      batch and streaming workloads on object storage (S3/ADLS/GCS). Provides
+      built-in Delta tables with ACID transactions, schema enforcement, and
+      time-travel. Strong MLflow integration makes it a natural fit for ML
+      experimentation alongside data engineering.
+    tags:
+      - lakehouse
+      - delta lake
+      - databricks
+      - spark
+      - batch
+      - streaming
+      - mlops
+      - medallion
+      - unity catalog
+      - data mesh
+    strengths:
+      - Unified compute for SQL, Python/Scala, and ML workloads on a single platform
+      - Delta Lake provides ACID transactions and CDC support out of the box
+      - Unity Catalog enables centralised governance with fine-grained access control
+    trade_offs:
+      - Significant vendor lock-in — Delta format and Unity Catalog are Databricks-native
+      - Cost can escalate rapidly with always-on clusters; requires careful DBU management
+      - Operational complexity increases at scale (cluster sizing, autoscaling tuning)
+    typical_use_cases:
+      - Enterprise data lakehouse on cloud object storage
+      - Unified batch + streaming pipelines with ML feature stores
+      - Multi-domain data mesh with shared governance layer
+    last_reviewed: "2025-01"
+    references:
+      - https://docs.databricks.com/en/lakehouse/index.html
+      - https://delta.io/
+
+  - name: Apache Iceberg on AWS/Azure (open lakehouse)
+    summary: >
+      An open table format for large analytic datasets on object storage, supported
+      natively by Spark, Flink, Trino, Snowflake, and Dremio. Iceberg provides
+      ACID transactions, hidden partitioning, schema evolution, and time-travel
+      without vendor lock-in. Typically deployed with a query engine (Trino/Athena)
+      and a REST catalog (Nessie or AWS Glue).
+    tags:
+      - iceberg
+      - open table format
+      - lakehouse
+      - trino
+      - flink
+      - athena
+      - vendor neutral
+      - streaming
+      - open source
+    strengths:
+      - True open standard — no vendor lock-in; portable across engines
+      - Hidden partitioning and schema evolution without table rewrites
+      - Strong ecosystem momentum (Spark, Flink, Trino, Snowflake all support it natively)
+    trade_offs:
+      - No managed compute layer — must pair with a query engine (Trino, Athena, Spark)
+      - Catalog management (Nessie, Glue, HMS) adds operational surface area
+      - Less integrated MLOps story compared to Databricks; requires separate tooling
+    typical_use_cases:
+      - Multi-engine lakehouse where avoiding vendor lock-in is a hard constraint
+      - Streaming + batch unified storage with Flink writers
+      - Cost-sensitive architectures leveraging open-source query engines
+    last_reviewed: "2025-01"
+    references:
+      - https://iceberg.apache.org/
+      - https://projectnessie.org/
+
+  - name: Snowflake Data Cloud
+    summary: >
+      A fully managed cloud data warehouse and data sharing platform with native
+      support for semi-structured data (VARIANT), streaming (Snowpipe), and
+      governed data sharing across organisations. Snowflake separates storage and
+      compute, scales to zero, and supports multi-cloud deployment. Its SQL-first
+      model suits BI-heavy organisations with existing SQL skills.
+    tags:
+      - snowflake
+      - data warehouse
+      - cloud
+      - sql
+      - data sharing
+      - semi-structured
+      - snowpipe
+      - governance
+      - bi
+    strengths:
+      - Zero operational overhead — fully managed, auto-scaling, no cluster tuning
+      - Secure data sharing and marketplace are best-in-class for cross-org data exchange
+      - Broad SQL tooling compatibility; low barrier for analyst self-service
+    trade_offs:
+      - Credit-based pricing can be expensive for high-concurrency or heavy compute workloads
+      - ML/AI capabilities (Snowpark ML) are maturing but lag Databricks for complex MLOps
+      - Deeper lock-in than Iceberg; migrating away requires ETL rewrites
+    typical_use_cases:
+      - BI-centric data warehouse with strong governance requirements
+      - Cross-organisational data sharing and marketplace participation
+      - Organisations prioritising analyst accessibility over engineering flexibility
+    last_reviewed: "2025-01"
+    references:
+      - https://docs.snowflake.com/
+      - https://www.snowflake.com/en/data-cloud/
+
+  - name: dbt + Airflow + Redshift/BigQuery (modern data stack)
+    summary: >
+      A composable modern data stack using dbt for SQL-based transformation,
+      Apache Airflow for orchestration, and a managed cloud warehouse (Redshift,
+      BigQuery, or Synapse) as the query layer. Emphasises software engineering
+      practices (version control, testing, documentation) applied to analytics
+      engineering. Widely adopted, large talent pool.
+    tags:
+      - dbt
+      - airflow
+      - redshift
+      - bigquery
+      - modern data stack
+      - analytics engineering
+      - transformation
+      - orchestration
+      - sql
+    strengths:
+      - Strong separation of concerns — ingestion, transformation, and serving are decoupled
+      - dbt brings software engineering discipline (tests, docs, lineage) to SQL transforms
+      - Large talent pool; most analytics engineers are already familiar with this stack
+    trade_offs:
+      - Streaming support requires additional tooling (Kafka + Flink) — not native to dbt
+      - Multiple moving parts increase integration surface and operational complexity
+      - Not a lakehouse — ML workloads require a separate compute layer (SageMaker, Vertex AI)
+    typical_use_cases:
+      - Analytics engineering-led teams prioritising transformation quality and docs
+      - Organisations with existing Redshift or BigQuery investments
+      - Batch-heavy pipelines where real-time is not a primary requirement
+    last_reviewed: "2025-01"
+    references:
+      - https://docs.getdbt.com/
+      - https://airflow.apache.org/

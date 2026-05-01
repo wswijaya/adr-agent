@@ -1,0 +1,37 @@
+[
+  {
+    "query": "Apache Kafka vs Kinesis streaming platform comparison 2025",
+    "results": [
+      {
+        "title": "Kafka vs Kinesis: Which Streaming Platform is Right for You?",
+        "url": "https://www.confluent.io/learn/kafka-vs-kinesis/",
+        "snippet": "Apache Kafka and AWS Kinesis are the two most popular streaming platforms. Kafka offers higher throughput and a richer ecosystem, while Kinesis provides tighter AWS integration and a simpler operational model."
+      },
+      {
+        "title": "Kinesis vs Kafka: A Detailed Comparison",
+        "url": "https://aws.amazon.com/blogs/big-data/kafka-vs-kinesis/",
+        "snippet": "Kinesis Data Streams on-demand mode scales automatically to handle any amount of data, while Kafka requires manual shard or partition management."
+      }
+    ]
+  },
+  {
+    "query": "Confluent Cloud Schema Registry IoT event streaming",
+    "results": [
+      {
+        "title": "Confluent Cloud Schema Registry — Official Docs",
+        "url": "https://docs.confluent.io/cloud/current/sr/overview.html",
+        "snippet": "Confluent Schema Registry provides a serving layer for your metadata. It provides a RESTful interface for storing and retrieving Avro, JSON Schema, and Protobuf schemas."
+      }
+    ]
+  },
+  {
+    "query": "AWS Kinesis Data Streams on-demand mode throughput limits",
+    "results": [
+      {
+        "title": "Amazon Kinesis Data Streams Quotas and Limits",
+        "url": "https://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html",
+        "snippet": "In on-demand mode, Kinesis Data Streams instantly accommodates your workloads as they ramp up or down. The default limit is 200 MB/s write and 400 MB/s read per data stream."
+      }
+    ]
+  }
+]

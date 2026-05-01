@@ -1,0 +1,47 @@
+{
+  "option_name": "AWS Kinesis Data Streams",
+  "dimension_scores": [
+    {
+      "dimension_id": "fit",
+      "label": "Problem fit",
+      "rationale": "Handles throughput requirements well but lacks native schema evolution; Glue Schema Registry is a separate service adding integration complexity.",
+      "score": 3,
+      "confidence": "high"
+    },
+    {
+      "dimension_id": "maturity",
+      "label": "Ecosystem maturity",
+      "rationale": "Mature AWS service with strong SLA and long track record, though its open-source ecosystem is narrower than Kafka.",
+      "score": 4,
+      "confidence": "high"
+    },
+    {
+      "dimension_id": "cost",
+      "label": "Total cost of ownership",
+      "rationale": "On-demand mode at 10M events/day estimated at $800-$1,500/month — the most cost-effective option evaluated.",
+      "score": 5,
+      "confidence": "medium"
+    },
+    {
+      "dimension_id": "ops",
+      "label": "Operational overhead",
+      "rationale": "Fully serverless with on-demand mode; no shard management; native CloudWatch metrics reduce monitoring setup.",
+      "score": 5,
+      "confidence": "high"
+    },
+    {
+      "dimension_id": "risk",
+      "label": "Risk and lock-in",
+      "rationale": "Deep AWS ecosystem coupling; migrating consumers and producers to another platform requires significant rework.",
+      "score": 2,
+      "confidence": "high"
+    },
+    {
+      "dimension_id": "skill_match",
+      "label": "Skill match",
+      "rationale": "Strong fit for AWS-native teams; teams with Kafka backgrounds face a Kinesis-specific learning curve.",
+      "score": 3,
+      "confidence": "medium"
+    }
+  ]
+}

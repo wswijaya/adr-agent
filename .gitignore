@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment / secrets — keep .env.example committed as a template
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+*.env
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Type checkers
+.mypy_cache/
+.ruff_cache/
+.pyright/
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# Writer lock file (runtime only, not meaningful to commit)
+decisions/.adr-sequence.lock
+
+# Temporary ADR write intermediates (should never persist, but just in case)
+decisions/*.tmp
+
+# Claude Code local overrides (personal, not shared)
+CLAUDE.local.md
+
+# Logs
+*.log

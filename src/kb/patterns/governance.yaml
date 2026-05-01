@@ -1,0 +1,146 @@
+# governance.yaml
+# Internal knowledge base — Governance & Security architecture patterns
+# Used by the ADR Agent KB lookup phase.
+
+domain: Governance & Security
+
+options:
+
+  - name: Apache Atlas + Apache Ranger
+    summary: >
+      Open-source data governance stack combining Atlas (metadata catalogue, data lineage,
+      classification) with Ranger (fine-grained access control policies). Originally built
+      for the Hadoop ecosystem but now supports cloud object stores, Kafka, and Spark.
+      Widely used in Cloudera and HDInsight deployments.
+    tags:
+      - apache atlas
+      - apache ranger
+      - data catalogue
+      - data lineage
+      - metadata
+      - access control
+      - governance
+      - open source
+      - hadoop
+      - cloudera
+      - classification
+    strengths:
+      - Fully open-source with no vendor lock-in on the governance layer
+      - Atlas provides rich lineage tracking from raw ingestion to BI consumption
+      - Ranger centralises access control policies across Hadoop, Spark, Kafka, and HDFS
+    trade_offs:
+      - High operational complexity; Atlas and Ranger both require significant tuning and maintenance
+      - UI and developer experience are dated compared to commercial alternatives
+      - Limited out-of-the-box support for modern cloud-native data stores (Delta Lake, Iceberg)
+    typical_use_cases:
+      - Hadoop/Cloudera-based data platforms needing governance without vendor lock-in
+      - Organisations with strong open-source preference and Hadoop expertise
+      - Environments requiring unified access policy enforcement across on-prem and cloud Hadoop
+    last_reviewed: "2025-01"
+    references:
+      - https://atlas.apache.org/
+      - https://ranger.apache.org/
+
+  - name: Collibra Data Intelligence Cloud
+    summary: >
+      Enterprise data governance platform providing business glossary, data catalogue,
+      data lineage, policy management, and data quality. Strong workflow engine for
+      stewardship processes and regulatory compliance (GDPR, CCPA, BCBS 239).
+      Deep integrations with Snowflake, Databricks, and major BI tools.
+    tags:
+      - collibra
+      - data catalogue
+      - data governance
+      - business glossary
+      - data lineage
+      - data quality
+      - compliance
+      - gdpr
+      - stewardship
+      - enterprise
+      - policy
+    strengths:
+      - Best-in-class business glossary and stewardship workflows for enterprise governance
+      - Strong regulatory compliance support (GDPR, CCPA, BCBS 239) with audit trails
+      - Deep integrations with Snowflake, Databricks, Tableau, and Power BI
+    trade_offs:
+      - High licensing cost; typically requires significant professional services for implementation
+      - Implementation complexity — full value realised only after extensive metadata curation
+      - Vendor lock-in on governance workflows and lineage metadata store
+    typical_use_cases:
+      - Large enterprises with regulatory compliance requirements (financial services, healthcare)
+      - Organisations needing business-facing data catalogues with stewardship workflows
+      - Multi-cloud environments requiring centralised governance across Snowflake and Databricks
+    last_reviewed: "2025-01"
+    references:
+      - https://www.collibra.com/us/en/products/data-intelligence-cloud
+      - https://developer.collibra.com/
+
+  - name: Alation Data Catalog
+    summary: >
+      Collaborative data catalogue built around machine learning-assisted curation and
+      a query-based discovery model. Alation Open Connector Framework supports 80+
+      data sources. Strong emphasis on analyst self-service — users find, understand,
+      and trust data without relying on a central team.
+    tags:
+      - alation
+      - data catalogue
+      - data discovery
+      - metadata
+      - data governance
+      - self-service
+      - analytics
+      - lineage
+      - collaboration
+      - trust score
+    strengths:
+      - ML-assisted curation reduces manual tagging burden; auto-generates descriptions from query patterns
+      - Strong analyst self-service UX — built for non-technical data consumers
+      - Alation Trust Flags surface data quality issues directly in the catalogue
+    trade_offs:
+      - Lighter governance enforcement compared to Collibra — stronger on discovery than policy management
+      - Premium pricing for advanced features (lineage, policy centre)
+      - Smaller connector ecosystem than Collibra for legacy and niche systems
+    typical_use_cases:
+      - Analytics-led organisations prioritising self-service data discovery over policy enforcement
+      - Data teams wanting to reduce ad-hoc "where is this data?" requests to engineering
+      - Modern cloud data stacks (Snowflake + dbt + Tableau) seeking a collaborative catalogue layer
+    last_reviewed: "2025-01"
+    references:
+      - https://www.alation.com/product/data-catalog/
+      - https://developer.alation.com/dev/docs
+
+  - name: Microsoft Purview
+    summary: >
+      Unified data governance service covering data catalogue, lineage, classification,
+      access policies, and compliance management across Azure, multi-cloud, and on-premises
+      sources. Integrates natively with Azure Data Factory, Synapse, and Fabric for automated
+      lineage capture. Purview Information Protection extends to Microsoft 365 workloads.
+    tags:
+      - microsoft purview
+      - azure
+      - data catalogue
+      - data lineage
+      - data classification
+      - compliance
+      - microsoft 365
+      - governance
+      - access policy
+      - azure synapse
+      - azure fabric
+    strengths:
+      - Zero-friction lineage for Azure-native pipelines (ADF, Synapse, Fabric) — captured automatically
+      - Native Microsoft 365 integration extends governance to documents, Teams, and SharePoint
+      - Included in many Azure enterprise agreements, reducing incremental cost
+    trade_offs:
+      - Best value realised within Azure ecosystem; multi-cloud connector quality is uneven
+      - Catalogue UX is less polished than Collibra or Alation for business users
+      - Policy enforcement model is still maturing compared to dedicated governance platforms
+    typical_use_cases:
+      - Azure-native organisations wanting governance integrated with their existing Microsoft stack
+      - Enterprises with Microsoft 365 data requiring unified sensitivity labelling across cloud and SaaS
+      - Organisations already using Azure Synapse or Fabric wanting automatic lineage without extra tooling
+    last_reviewed: "2025-01"
+    references:
+      - https://learn.microsoft.com/en-us/purview/purview
+      - https://learn.microsoft.com/en-us/purview/concept-best-practices-lineage

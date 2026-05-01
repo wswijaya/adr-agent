@@ -1,0 +1,145 @@
+# ai_mlops.yaml
+# Internal knowledge base — AI/ML & MLOps architecture patterns
+# Used by the ADR Agent KB lookup phase.
+
+domain: AI/ML & MLOps
+
+options:
+
+  - name: MLflow + AWS SageMaker
+    summary: >
+      MLflow provides open-source experiment tracking, model registry, and serving,
+      deployed on AWS SageMaker for managed training and inference. The combination
+      gives end-to-end ML lifecycle management — from experiment to production — with
+      SageMaker handling compute scaling and MLflow providing the open metadata layer.
+    tags:
+      - mlflow
+      - sagemaker
+      - aws
+      - experiment tracking
+      - model registry
+      - model serving
+      - mlops
+      - training
+      - inference
+      - pipeline
+    strengths:
+      - MLflow is open-source — avoids lock-in on the metadata/registry layer
+      - SageMaker provides fully managed compute for training and real-time inference
+      - Large community and extensive AWS ecosystem integrations
+    trade_offs:
+      - Two separate systems to manage — MLflow server + SageMaker resources
+      - SageMaker costs can escalate with always-on endpoints; serverless endpoints help but add cold starts
+      - MLflow UI and SageMaker Studio overlap in features, requiring clear team conventions
+    typical_use_cases:
+      - AWS-native organisations building production ML pipelines
+      - Teams wanting open metadata (MLflow) without SageMaker lock-in on tracking
+      - Batch training with scheduled SageMaker jobs + MLflow experiment logging
+    last_reviewed: "2025-01"
+    references:
+      - https://mlflow.org/docs/latest/index.html
+      - https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html
+
+  - name: Kubeflow Pipelines
+    summary: >
+      Kubernetes-native ML workflow orchestration platform. Pipelines are defined as
+      DAGs of containerised components, enabling reproducible and portable ML workflows.
+      Runs on any Kubernetes cluster (on-prem or cloud). Katib provides hyperparameter
+      tuning and KServe handles model serving.
+    tags:
+      - kubeflow
+      - kubernetes
+      - pipeline
+      - mlops
+      - workflow
+      - orchestration
+      - open source
+      - container
+      - on-premises
+      - training
+    strengths:
+      - Fully open-source with no vendor lock-in; portable across cloud and on-prem
+      - Strong reproducibility — each pipeline step is a versioned container
+      - Rich ecosystem: Katib (HPO), KServe (serving), Feast (feature store) integrate natively
+    trade_offs:
+      - High operational complexity — requires Kubernetes expertise and ongoing cluster management
+      - Steep learning curve; pipeline DSL and Kubernetes abstractions are non-trivial
+      - Slower release cadence and weaker managed-service story compared to cloud-native options
+    typical_use_cases:
+      - Organisations with existing Kubernetes infrastructure seeking ML workflow portability
+      - On-premises ML environments with data residency requirements
+      - Teams requiring full control over the compute and metadata layers
+    last_reviewed: "2025-01"
+    references:
+      - https://www.kubeflow.org/docs/
+      - https://kserve.github.io/website/
+
+  - name: Google Vertex AI Pipelines
+    summary: >
+      Fully managed MLOps platform on Google Cloud. Vertex AI Pipelines orchestrates
+      ML workflows using Kubeflow Pipelines SDK or TFX, with managed compute, Feature Store,
+      Model Registry, and Endpoint serving. Vertex AI Experiments and Model Monitoring
+      provide end-to-end observability.
+    tags:
+      - vertex ai
+      - google cloud
+      - gcp
+      - pipeline
+      - mlops
+      - managed
+      - feature store
+      - model registry
+      - training
+      - inference
+      - bigquery ml
+    strengths:
+      - Fully managed — no infrastructure to operate; auto-scaling training and serving
+      - Deep BigQuery integration enables feature engineering at petabyte scale
+      - Unified platform covering pipelines, feature store, model registry, and monitoring
+    trade_offs:
+      - Strong GCP lock-in — pipelines and feature store are tightly coupled to Google Cloud
+      - Cost model is complex; Vertex AI Endpoints can be expensive for low-traffic models
+      - Less flexible than Kubeflow for custom runtimes or non-standard frameworks
+    typical_use_cases:
+      - GCP-native organisations with existing BigQuery data assets
+      - Teams wanting a fully managed MLOps platform without Kubernetes expertise
+      - Large-scale feature engineering pipelines feeding from BigQuery or Cloud Storage
+    last_reviewed: "2025-01"
+    references:
+      - https://cloud.google.com/vertex-ai/docs/pipelines/introduction
+      - https://cloud.google.com/vertex-ai
+
+  - name: Azure Machine Learning
+    summary: >
+      Microsoft's cloud ML platform providing managed compute, AutoML, Designer (no-code),
+      MLflow-compatible experiment tracking, model registry, and managed online/batch endpoints.
+      Deep integration with Azure Data Factory, Synapse Analytics, and Azure DevOps for
+      enterprise MLOps workflows.
+    tags:
+      - azure ml
+      - azure
+      - microsoft
+      - mlops
+      - automl
+      - managed
+      - model registry
+      - pipeline
+      - training
+      - inference
+      - mlflow
+    strengths:
+      - Native MLflow compatibility for experiment tracking — reduces migration friction
+      - Deep Azure ecosystem integration (AAD, DevOps, Synapse) suits enterprise organisations
+      - Responsible AI dashboard and content safety features built in
+    trade_offs:
+      - Azure lock-in for compute and deployment; MLflow compatibility helps but doesn't fully eliminate it
+      - UI can feel complex; many overlapping ways to accomplish the same task
+      - AutoML and Designer features are strong but less flexible for advanced custom pipelines
+    typical_use_cases:
+      - Azure-native enterprises building production ML workflows with DevOps integration
+      - Teams with existing MLflow usage wanting to migrate to a managed platform
+      - Organisations with compliance requirements benefiting from Responsible AI tooling
+    last_reviewed: "2025-01"
+    references:
+      - https://learn.microsoft.com/en-us/azure/machine-learning/overview-what-is-azure-machine-learning
+      - https://learn.microsoft.com/en-us/azure/machine-learning/concept-mlflow

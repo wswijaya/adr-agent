@@ -1,0 +1,145 @@
+# integration.yaml
+# Internal knowledge base — Integration & API architecture patterns
+# Used by the ADR Agent KB lookup phase.
+
+domain: Integration & API
+
+options:
+
+  - name: Apache Kafka (self-managed or Confluent Cloud)
+    summary: >
+      Distributed event streaming platform designed for high-throughput, low-latency
+      message delivery. Provides durable, replayable event logs with configurable
+      retention. The Confluent ecosystem adds Schema Registry, ksqlDB, and 200+ connectors.
+      Suitable for event-driven architectures, CDC pipelines, and real-time analytics.
+    tags:
+      - kafka
+      - confluent
+      - event streaming
+      - messaging
+      - pub-sub
+      - cdc
+      - real-time
+      - streaming
+      - schema registry
+      - event-driven
+      - integration
+    strengths:
+      - Industry standard for high-throughput event streaming; handles millions of events/second
+      - Durable, replayable log enables event sourcing and audit trails
+      - Rich connector ecosystem (Kafka Connect) accelerates source/sink integrations
+    trade_offs:
+      - Operational complexity for self-managed clusters; Confluent Cloud mitigates but adds cost
+      - Not a fit for request/response or RPC patterns — designed for async, one-way messaging
+      - Schema evolution requires careful management via Schema Registry
+    typical_use_cases:
+      - High-throughput event streaming and CDC pipelines
+      - Real-time data integration between microservices
+      - Event-driven architectures requiring durable, replayable message logs
+    last_reviewed: "2025-01"
+    references:
+      - https://kafka.apache.org/documentation/
+      - https://docs.confluent.io/cloud/current/overview.html
+
+  - name: AWS EventBridge
+    summary: >
+      Serverless event bus service for event-driven architectures on AWS. Supports
+      event routing via rules, schema registry, and native integrations with 200+
+      AWS services and SaaS providers. EventBridge Pipes provides point-to-point
+      integrations with filtering and transformation.
+    tags:
+      - eventbridge
+      - aws
+      - event bus
+      - serverless
+      - event-driven
+      - integration
+      - saas
+      - routing
+      - messaging
+      - pub-sub
+    strengths:
+      - Zero infrastructure to manage — fully serverless with per-event pricing
+      - Native integrations with 200+ AWS services and SaaS providers (Salesforce, Zendesk, etc.)
+      - Schema registry and event discovery built in; low integration friction for AWS-native workloads
+    trade_offs:
+      - AWS-only; not suitable for multi-cloud or hybrid architectures
+      - Throughput limits (10,000 events/second by default) constrain high-volume use cases
+      - Limited replay capability compared to Kafka; once processed, events are not retained by default
+    typical_use_cases:
+      - AWS-native event-driven microservice communication
+      - SaaS-to-AWS integrations using pre-built event sources
+      - Loosely coupled application workflows with conditional routing
+    last_reviewed: "2025-01"
+    references:
+      - https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html
+      - https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-pipes.html
+
+  - name: MuleSoft Anypoint Platform
+    summary: >
+      Enterprise integration platform (iPaaS) providing API management, ESB-style
+      message routing, and pre-built connectors for SaaS, databases, and legacy systems.
+      Anypoint Exchange hosts reusable API specifications, connectors, and integration
+      templates. Strong governance features suit regulated industries.
+    tags:
+      - mulesoft
+      - anypoint
+      - ipaas
+      - api management
+      - esb
+      - enterprise integration
+      - connector
+      - salesforce
+      - legacy
+      - etl
+      - api gateway
+    strengths:
+      - Largest pre-built connector library for enterprise SaaS and legacy systems
+      - API-led connectivity pattern enforces reusability and separation of concerns
+      - Strong governance, auditing, and compliance features for regulated industries
+    trade_offs:
+      - High licensing cost; Salesforce ownership has increased pricing pressure
+      - Steep learning curve for Mule DSL and DataWeave transformation language
+      - Heavier weight than cloud-native alternatives; not ideal for greenfield cloud architectures
+    typical_use_cases:
+      - Complex B2B integrations with legacy ERP, mainframe, or SFTP-based systems
+      - Enterprises with large Salesforce deployments requiring deep CRM integration
+      - Regulated industries needing centralised API governance and audit trails
+    last_reviewed: "2025-01"
+    references:
+      - https://docs.mulesoft.com/general/
+      - https://www.mulesoft.com/platform/enterprise-integration
+
+  - name: Azure Service Bus
+    summary: >
+      Fully managed enterprise message broker with queues and pub-sub topics.
+      Supports AMQP 1.0, dead-letter queues, message sessions, and scheduled delivery.
+      Pairs with Azure Event Grid for reactive event routing and Azure Logic Apps for
+      low-code workflow automation.
+    tags:
+      - azure service bus
+      - azure
+      - message broker
+      - queue
+      - pub-sub
+      - amqp
+      - enterprise messaging
+      - integration
+      - event grid
+      - logic apps
+    strengths:
+      - Enterprise-grade message ordering, deduplication, and dead-letter handling
+      - Native Azure ecosystem integration with AAD, Event Grid, and Logic Apps
+      - AMQP 1.0 compliance enables cross-platform client compatibility
+    trade_offs:
+      - Azure-specific; multi-cloud architectures require additional abstraction layers
+      - Not designed for high-throughput streaming (use Event Hubs for that)
+      - Logic Apps integration adds cost and complexity for simple routing scenarios
+    typical_use_cases:
+      - Azure-native enterprise messaging with guaranteed delivery and ordering
+      - Decoupling microservices within Azure workloads
+      - Workflow automation integrating with Azure Logic Apps or Azure Functions
+    last_reviewed: "2025-01"
+    references:
+      - https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview
+      - https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-amqp-overview
