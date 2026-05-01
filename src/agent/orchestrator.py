@@ -91,7 +91,7 @@ def _is_interactive() -> bool:
 def _slugify(title: str) -> str:
     slug = re.sub(r"[^\w\s-]", "", title.lower())
     slug = re.sub(r"[\s_]+", "-", slug)
-    return slug[:60].strip("-")
+    return slug[:15].strip("-")
 
 
 def _resolve_search_client(explicit: Optional[WebSearchClient]) -> Optional[WebSearchClient]:
