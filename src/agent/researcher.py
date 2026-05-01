@@ -96,12 +96,12 @@ class FirecrawlSearchClient:
 
 class DuckDuckGoSearchClient:
     """
-    Uses the duckduckgo-search library. No API key required.
+    Uses the ddgs library. No API key required.
     Rate-limited by DuckDuckGo — suitable for low-volume usage and local dev.
     """
 
     def search(self, query: str, max_results: int = 5) -> list[dict]:
-        from duckduckgo_search import DDGS
+        from ddgs import DDGS
         results = []
         with DDGS() as ddgs:
             for r in ddgs.text(query, max_results=max_results):

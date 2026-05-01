@@ -43,7 +43,7 @@ def score_option(
     messages = [{"role": "user", "content": user_msg}]
 
     for attempt in range(2):
-        raw = client.complete(messages=messages, system=prompts.SCORING_SYSTEM, max_tokens=4096)
+        raw = client.complete(messages=messages, system=prompts.SCORING_SYSTEM, max_tokens=8192)
         clean = re.sub(r"```(?:json)?|```", "", raw).strip()
         try:
             data = json.loads(clean)

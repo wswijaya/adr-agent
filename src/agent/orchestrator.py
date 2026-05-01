@@ -58,7 +58,7 @@ def _llm(client: LLMClient, system: str, user: str, label: str) -> str:
     return client.complete(
         messages=[{"role": "user", "content": user}],
         system=system,
-        max_tokens=4096,
+        max_tokens=8192,
     )
 
 

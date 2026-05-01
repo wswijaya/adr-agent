@@ -7,5 +7,5 @@ pydantic>=2.6
 pyyaml>=6
 tavily-python>=0.3
 firecrawl-py>=1.0
-duckduckgo-search>=6.0
+ddgs>=1.0
 pytest>=8

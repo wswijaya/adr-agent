@@ -23,7 +23,7 @@ class LLMClient(ABC):
         self,
         messages: list[dict],
         system: str,
-        max_tokens: int = 4096,
+        max_tokens: int = 8192,
     ) -> str:
         """Send a chat completion and return the response text."""
 
@@ -32,7 +32,7 @@ class LLMClient(ABC):
         messages: list[dict],
         system: str,
         response_model: Type[BaseModel],
-        max_tokens: int = 4096,
+        max_tokens: int = 8192,
     ) -> BaseModel:
         """
         Request a response that conforms to response_model.

@@ -292,7 +292,7 @@ class MockLLMClient(LLMClient):
     Dispatches to canned responses based on the system prompt.
     """
 
-    def complete(self, messages: list[dict], system: str, max_tokens: int = 4096) -> str:
+    def complete(self, messages: list[dict], system: str, max_tokens: int = 8192) -> str:
         system_lower = system.lower()
         user_content = messages[0]["content"] if messages else ""
 
